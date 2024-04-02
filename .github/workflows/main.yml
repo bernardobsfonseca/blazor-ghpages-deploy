@@ -2,14 +2,13 @@ name: Deploy
 
 on:
   push:
-    branchs: ["main"]
-
-    workflow_dispatch:
+    branches: ["main"]
+  workflow_dispatch:
 
 permissions:
   contents: read
   pages: write
-  id-token: write
+  secrets: write
 
 concurrency:
   group: "pages"
@@ -20,7 +19,7 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubunt-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -37,10 +36,10 @@ jobs:
         run: dotnet restore
       
       - name: Build
-        run: dotnet build -c -Release --no-restore
+        run: dotnet build -c Release --no-restore
       
       - name: Publish .NET
-        run: dotnet publish BlazorDeploy.csproj -c:Release -o docs --nologo
+        run: dotnet publish path/to/BlazorDeploy.csproj -c Release -o docs --nologo
       
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -52,4 +51,4 @@ jobs:
       
       - name: Deploy
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v3
